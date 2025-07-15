@@ -1,0 +1,92 @@
+<div class="container">
+  <h2>Attendance History</h2>
+
+  <!-- Filters & Search Section -->
+  <div class="filter-section">
+    <h3>Filters & Search</h3>
+    <div class="filter-controls">
+      <div class="filter-group">
+        <label>Date Range</label>
+        <input type="date" [(ngModel)]="startDate" [value]="startDate" class="date-input">
+        <span>to</span>
+        <input type="date" [(ngModel)]="endDate" [value]="endDate" class="date-input">
+      </div>
+      <div class="filter-group">
+        <label>School Name</label>
+        <select [(ngModel)]="schoolId" class="select-input">
+          <option value="">All Schools</option>
+          <!-- Populate dynamically -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Class Name</label>
+        <select [(ngModel)]="classId" class="select-input">
+          <option value="">All Classes</option>
+          <!-- Populate dynamically -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Teacher Name</label>
+        <select [(ngModel)]="teacherId" class="select-input">
+          <option value="">All Teachers</option>
+          <!-- Populate dynamically -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Cover Status</label>
+        <select [(ngModel)]="isCover" class="select-input">
+          <option value="">All Status</option>
+          <option value="true">Cover</option>
+          <option value="false">Non-Cover</option>
+        </select>
+      </div>
+      <div class="filter-group search-group">
+        <label>Search</label>
+        <input type="text" [(ngModel)]="query" placeholder="Search by class code, teacher, or school..." class="search-input">
+        <button (click)="applyFilters()" class="search-button">Search</button>
+      </div>
+      <button class="clear-button" (click)="clearFilters()">Clear All</button>
+    </div>
+  </div>
+
+  <!-- Table Section with Export Button -->
+  <div class="table-wrapper">
+    <button class="export-button" (click)="exportData()">Export</button>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>School Name</th>
+          <th>Class Name</th>
+          <th>Class Code</th>
+          <th>Teacher</th>
+          <th>Level Unit</th>
+          <th>Lesson Number</th>
+          <th>Checkin By</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="isLoading" class="loading">
+          <td colspan="10">Loading...</td>
+        </tr>
+        <tr *ngIf="!isLoading && error" class="error">
+          <td colspan="10">{{ error }}</td>
+        </tr>
+        <tr *ngFor="let record of attendanceRecords">
+          <td>{{ record.id }}</td>
+          <td>{{ record.date | date:'MM/dd/yyyy' }}</td>
+          <td>{{ record.school_name }}</td>
+          <td>{{ record.class_name }}</td>
+          <td>{{ record.class_code }}</td>
+          <td>{{ record.teacher_name }}</td>
+          <td>{{ record.level_unit }}</td>
+          <td>{{ record.lesson_number }}</td>
+          <td>{{ record.checkin_by }}</td>
+          <td>{{ record.is_cover ? 'Cover' : 'Official' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

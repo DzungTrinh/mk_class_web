@@ -1,0 +1,51 @@
+<div class="login-wrapper">
+  <div class="auth-card">
+    <img src="/assets/logo.svg" alt="logo" class="logo" />
+
+    <h2>Welcome back</h2>
+    <p class="subtitle">Sign in to your account</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
+
+      <div class="row-between">
+        <mat-checkbox formControlName="remember">Remember me</mat-checkbox>
+        <a routerLink="/forgot-password">Forgot password?</a>
+      </div>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="full"
+        [disabled]="loading || form.invalid"
+      >
+        {{ loading ? 'Signing in…' : 'Sign in' }}
+      </button>
+
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+    </form>
+
+    <div class="divider"><span>Or continue with</span></div>
+
+    <button mat-stroked-button class="social full">
+      <img src="/assets/google.svg" height="18" /> Continue with Google
+    </button>
+
+    <button mat-stroked-button class="social full">
+      <img src="/assets/github.svg" height="18" /> Continue with GitHub
+    </button>
+
+    <p class="footer">
+      Don’t have an account?
+      <a routerLink="/register">Sign up</a>
+    </p>
+  </div>
+</div>

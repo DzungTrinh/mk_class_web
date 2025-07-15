@@ -1,0 +1,43 @@
+<p>register works!</p>
+<div class="login-wrapper">
+  <div class="auth-card">
+    <img src="assets/logo.svg" alt="logo" class="logo" />
+
+    <h2>Create account</h2>
+    <p class="subtitle">Sign up to get started</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" formControlName="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" formControlName="confirm" />
+        <mat-error *ngIf="form.errors?.['notMatch']">Passwords do not match</mat-error>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" class="full" [disabled]="loading || form.invalid">
+        {{ loading ? 'Registering…' : 'Sign up' }}
+      </button>
+
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+    </form>
+
+    <p class="footer">
+      Already have an account?
+      <a routerLink="/login">Sign in</a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+.auth-card {
+  width: 360px;
+  padding: 2rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.logo {
+  width: 40px;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #000000;
+}
+
+.full {
+  width: 100%;
+}
+
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+  margin: 0 0.5rem;
+}
+
+.social img {
+  margin-right: 0.5rem;
+}
+
+.error {
+  color: #ef4444;
+  margin-top: 0.75rem;
+}
+
+.footer {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}

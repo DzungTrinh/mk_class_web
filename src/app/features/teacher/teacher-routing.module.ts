@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Attendance } from './attendance/attendance';
+import { CoverTeacherAssignment } from './cover-teacher-assignment/cover-teacher-assignment';
 
 
 const routes: Routes = [
-  { path: '', component: Attendance }
+  { path: 'attendance', component: Attendance},
+  { path: 'cover-teacher-assignment', component: CoverTeacherAssignment }
 ];
 
 @NgModule({

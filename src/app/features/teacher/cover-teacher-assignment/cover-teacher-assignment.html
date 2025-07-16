@@ -1,0 +1,58 @@
+<div class="cover-teacher-container">
+  <h2>Cover Teacher Assignment</h2>
+  <button class="add-record-button" (click)="toggleForm()">Add New Record</button>
+
+  <form [formGroup]="coverForm" (ngSubmit)="saveForm()" *ngIf="showForm">
+    <div formArrayName="records">
+      <div *ngFor="let record of records.controls; let i=index" class="record-row" [formGroupName]="i">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" formControlName="date" class="input-control" required>
+          </div>
+          <div class="form-group">
+            <label>School ID</label>
+            <input type="number" formControlName="school_id" class="input-control" required>
+          </div>
+          <div class="form-group">
+            <label>Class ID</label>
+            <input type="number" formControlName="class_id" class="input-control" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Official Teacher ID</label>
+            <input type="number" formControlName="official_teacher_id" class="input-control" required>
+          </div>
+          <div class="form-group">
+            <label>Cover Teacher ID</label>
+            <input type="number" formControlName="cover_teacher_id" class="input-control" required>
+          </div>
+          <div class="form-group">
+            <label>Level ID</label>
+            <input type="number" formControlName="level_id" class="input-control" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Unit ID</label>
+            <input type="number" formControlName="unit_id" class="input-control" required>
+          </div>
+          <div class="form-group">
+            <label>Lesson ID</label>
+            <input type="number" formControlName="lesson_id" class="input-control" required>
+          </div>
+          <div class="form-group">
+            <label>Note</label>
+            <input type="text" formControlName="note" class="input-control">
+          </div>
+        </div>
+        <button type="button" class="remove-record-button" (click)="removeRecord(i)">Remove</button>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="save-button" [disabled]="!coverForm.valid">Save</button>
+      <button type="button" class="cancel-button" (click)="cancelForm()">Cancel</button>
+    </div>
+  </form>
+</div>

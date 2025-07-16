@@ -1,14 +1,6 @@
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-  font-family: Arial, sans-serif;
-}
-
-h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: bold;
+.attendance-container {
+  max-width: 100%;
+  padding: 0;
 }
 
 .filter-card {
@@ -33,6 +25,7 @@ h2 {
 
 .clear-button {
   background: #f3f4f6;
+  color: #2563eb;
   border: 1px solid #d1d5db;
   padding: 8px 16px;
   border-radius: 6px;
@@ -137,6 +130,10 @@ label {
   background-color: #059669;
 }
 
+.table-wrapper {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -167,7 +164,7 @@ table tbody tr:nth-child(even) {
   font-size: 16px;
   font-weight: 500;
   background: #f9fafb;
-  height: 100%; /* Ensure it fills the table height */
+  height: 100%;
 }
 
 .error td {

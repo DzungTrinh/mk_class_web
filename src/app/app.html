@@ -1,12 +1,20 @@
-<mat-toolbar color="primary">
-<div class="min-h-screen">
-  <header>
-    <h1>Teacher Management System</h1>
+<div class="app-layout">
+  <header class="app-header">
+    <h1>Attendance Management System</h1>
   </header>
-  <main class="container">
-    <router-outlet></router-outlet>
-  </main>
+  <div class="main-content">
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li><a routerLink="/teacher/attendance" routerLinkActive="active">Attendance</a></li>
+          <li><a routerLink="/teacher/cover-teacher-assignment" routerLinkActive="active">Cover Teacher Assignment</a></li>
+          <li><a routerLink="/students" routerLinkActive="active">Students</a></li> <!-- Placeholder for other features -->
+          <li><a routerLink="/admin" routerLinkActive="active">Admin</a></li> <!-- Placeholder for other features -->
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>
-</mat-toolbar>
-
-<router-outlet></router-outlet>

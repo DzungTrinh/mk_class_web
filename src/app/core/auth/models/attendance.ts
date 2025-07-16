@@ -10,3 +10,13 @@ export interface AttendanceRecord {
   checkin_by: string;
   is_cover: boolean;
 }
+
+export interface AttendanceFilter {
+  start_date: string;
+  end_date: string;
+  school_id?: string;
+  class_id?: string;
+  teacher_ids?: string[];
+  is_cover?: boolean;
+  query?: string;
+}

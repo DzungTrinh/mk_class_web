@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CommonModule, DatePipe } from '@angular/common';
-import { AttendanceRecord } from '../../../core/auth/models/attendance';
+import { AttendanceFilter, AttendanceRecord } from '../../../core/auth/models/attendance';
 import { AttendanceService } from '../../../core/auth/services/attendance.service';
 import { FormsModule } from '@angular/forms';
 
@@ -25,16 +25,47 @@ export class Attendance implements OnInit {
   isCover = '';
   query = '';
 
+  schools: { id: number; name: string }[] = [];
+  classes: { id: number; name: string }[] = [];
+  teachers: { id: number; name: string }[] = [];
+
   constructor(private attendanceService: AttendanceService) {}
 
   ngOnInit(): void {
+    this.loadFilterValues();
     this.loadAttendance();
+  }
+
+  loadFilterValues(): void {
+    this.isLoading = true;
+    this.attendanceService.getFilterValues().subscribe({
+      next: (data) => {
+        this.schools = data.schools;
+        this.classes = data.classes;
+        this.teachers = data.teachers;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Failed to load filter values. Please try again later.';
+        this.isLoading = false;
+        console.error('Error fetching filter values:', err);
+      }
+    });
   }
 
   loadAttendance(): void {
     this.isLoading = true;
     this.error = null;
-    this.attendanceService.getAttendanceHistory({ start_date: this.startDate, end_date: this.endDate, school_id: this.schoolId || undefined, class_id: this.classId || undefined, teacher_id: this.teacherId || undefined, is_cover: this.isCover || undefined, query: this.query || undefined }).subscribe({
+    const filter: AttendanceFilter = {
+      start_date: this.startDate,
+      end_date: this.endDate,
+      school_id: this.schoolId || undefined,
+      class_id: this.classId || undefined,
+      teacher_ids: this.teacherId ? [this.teacherId] : undefined,
+      is_cover: this.isCover === 'true' ? true : this.isCover === 'false' ? false : undefined,
+      query: this.query || undefined
+    };
+    this.attendanceService.getAttendanceHistory(filter).subscribe({
       next: (records) => {
         this.attendanceRecords = records;
         this.isLoading = false;
@@ -65,16 +96,16 @@ export class Attendance implements OnInit {
   exportData(): void {
     this.isLoading = true;
     this.error = null;
-    const exportParams = {
+    const filter: AttendanceFilter = {
       start_date: this.startDate,
       end_date: this.endDate,
       school_id: this.schoolId || undefined,
       class_id: this.classId || undefined,
-      teacher_id: this.teacherId || undefined,
-      is_cover: this.isCover || undefined,
+      teacher_ids: this.teacherId ? [this.teacherId] : undefined,
+      is_cover: this.isCover === 'true' ? true : this.isCover === 'false' ? false : undefined,
       query: this.query || undefined
     };
-    this.attendanceService.exportAttendanceHistory(exportParams).subscribe({
+    this.attendanceService.exportAttendanceHistory(filter).subscribe({
       next: (response) => {
         const url = window.URL.createObjectURL(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
         const a = document.createElement('a');
@@ -90,5 +121,9 @@ export class Attendance implements OnInit {
         console.error('Error exporting attendance:', err);
       }
     });
+  }
+
+  updateTeacherIds(value: string): void {
+    this.teacherId = value;
   }
 }

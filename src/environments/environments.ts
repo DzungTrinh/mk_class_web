@@ -1,3 +1,5 @@
 export const environment = {
   apiUrl: 'http://localhost:8080/api/v1', 
+  eduUserUrl: 'http://localhost:5003/api/v1',
+  tokenToServer: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTE3MjM4OCwiZW1haWwiOiJhc2RzYUBnbWFpbC5jb20iLCJwaG9uZSI6IjA5Nzg3MzIyNTAiLCJyb2xlcyI6WyJTY2hvb2wiLCJTdHVkZW50IiwiVGVhY2hlciJdLCJyb2xlX25hbWUiOnsiU2Nob29sIjoiU2Nob29sIiwiU3R1ZGVudCI6IlN0dWRlbnQiLCJUZWFjaGVyIjoiVGVhY2hlciJ9LCJyb2xlX3ByaW9yaXR5IjoiU2Nob29sIiwiaWF0IjoxNzMwMTY5Mzc1fQ.OUlUoJjNK6gG-MZ0TTA2ColFIcVh2-i1BISI1kTZhOQ'
 };

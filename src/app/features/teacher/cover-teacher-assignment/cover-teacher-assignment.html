@@ -77,7 +77,7 @@
                     Select Teacher
                   </option>
                   <option
-                    *ngFor="let teacher of teachers"
+                    *ngFor="let teacher of officialTeachers"
                     [ngValue]="teacher.id"
                   >
                     {{ teacher.name }}
@@ -97,7 +97,7 @@
                     Select Cover Teacher
                   </option>
                   <option
-                    *ngFor="let teacher of teachers"
+                    *ngFor="let teacher of coverTeachers"
                     [ngValue]="teacher.id"
                   >
                     {{ teacher.name }}
@@ -166,5 +166,38 @@
         </div>
       </div>
     </form>
+  </div>
+
+  <div class="assignments-table" *ngIf="!showForm">
+    <h3>Assigned Cover Teachers</h3>
+    <table *ngIf="!loadingAssignments" class="assignment-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>School</th>
+          <th>Class</th>
+          <th>Description</th>
+          <th>Official Teacher</th>
+          <th>Cover Teacher</th>
+          <th>Unit</th>
+          <th>Lesson ID</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let assignment of assignments">
+          <td>{{ assignment.date }}</td>
+          <td>{{ assignment.school_name }}</td>
+          <td>{{ assignment.class_name }}</td>
+          <td>{{ assignment.class_description }}</td>
+          <td>{{ assignment.official_teacher_name }}</td>
+          <td>{{ assignment.cover_teacher_name }}</td>
+          <td>{{ assignment.level_unit }}</td>
+          <td>{{ assignment.lesson_id }}</td>
+          <td>{{ assignment.note }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="loadingAssignments" class="loading-icon">⏳</div>
   </div>
 </div>

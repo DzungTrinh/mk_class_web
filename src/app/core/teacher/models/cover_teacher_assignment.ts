@@ -24,6 +24,13 @@ interface TeacherListResponse {
   teacher_name: string;
 }
 
+interface TeacherListResponse2 {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+}
+
 interface UnitListResponse {
   unit_id: number;
   unit_name: string;
@@ -32,4 +39,16 @@ interface UnitListResponse {
 interface LessonListResponse {
   lesson_id: number;
   lesson_name: string;
+}
+
+interface CoverTeacherListResponse {
+  date: string;
+  school_name: string;
+  class_name: string;
+  class_description: string;
+  official_teacher_name: string;
+  cover_teacher_name: string;
+  level_unit: string;
+  lesson_id: number;
+  note: string;
 }

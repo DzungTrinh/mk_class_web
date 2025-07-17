@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -23,12 +23,13 @@ import {
   imports: [CommonModule, ReactiveFormsModule],
   providers: [CoverTeacherService],
 })
-export class CoverTeacherAssignment {
+export class CoverTeacherAssignment implements OnInit {
   showForm = false;
   coverForm: FormGroup;
   schools: Option[] = [];
   classes: Option[] = [];
-  teachers: Option[] = [];
+  officialTeachers: Option[] = [];
+  coverTeachers: Option[] = [];
   units: Option[] = [];
   lessons: Option[] = [];
   loading = {
@@ -39,13 +40,15 @@ export class CoverTeacherAssignment {
     lessons: false,
   };
   private subscriptions: Subscription[] = [];
+  assignments: CoverTeacherListResponse[] = [];
+  loadingAssignments = false;
 
   constructor(
     private fb: FormBuilder,
     private coverService: CoverTeacherService
   ) {
     this.coverForm = this.fb.group({
-      records: this.fb.array([])
+      records: this.fb.array([]),
     });
   }
 
@@ -57,6 +60,7 @@ export class CoverTeacherAssignment {
     this.showForm = !this.showForm;
     if (this.showForm && this.records.length === 0) {
       this.loadSchools();
+      this.loadCoverTeachers();
       this.addRecord();
     }
   }
@@ -66,7 +70,7 @@ export class CoverTeacherAssignment {
     this.coverService.getSchools().subscribe({
       next: (data) => {
         const safeData = Array.isArray(data) ? data : [];
-        this.schools = safeData.map(s => ({
+        this.schools = safeData.map((s) => ({
           id: s.school_id,
           name: s.school_name,
         }));
@@ -75,7 +79,7 @@ export class CoverTeacherAssignment {
       error: (err) => {
         console.error(err.message);
         this.loading.schools = false;
-      }
+      },
     });
   }
 
@@ -83,13 +87,13 @@ export class CoverTeacherAssignment {
     if (this.loading.classes) return;
     this.loading.classes = true;
     this.classes = [];
-    this.teachers = [];
+    this.officialTeachers = [];
     this.units = [];
     this.lessons = [];
     this.coverService.getClasses(schoolId).subscribe({
       next: (data) => {
         const safeData = Array.isArray(data) ? data : [];
-        this.classes = safeData.map(c => ({
+        this.classes = safeData.map((c) => ({
           id: c.class_id,
           name: c.class_code,
         }));
@@ -98,20 +102,20 @@ export class CoverTeacherAssignment {
       error: (err) => {
         console.error(err.message);
         this.loading.classes = false;
-      }
+      },
     });
   }
 
-  loadTeachers(classId: number) {
+  loadOfficialTeachers(classId: number) {
     if (this.loading.teachers) return;
     this.loading.teachers = true;
-    this.teachers = [];
+    this.officialTeachers = [];
     this.units = [];
     this.lessons = [];
     this.coverService.getTeachers(classId).subscribe({
       next: (data) => {
         const safeData = Array.isArray(data) ? data : [];
-        this.teachers = safeData.map(t => ({
+        this.officialTeachers = safeData.map((t) => ({
           id: t.teacher_id,
           name: t.teacher_name,
         }));
@@ -120,7 +124,26 @@ export class CoverTeacherAssignment {
       error: (err) => {
         console.error(err.message);
         this.loading.teachers = false;
-      }
+      },
+    });
+  }
+
+  loadCoverTeachers() {
+    if (this.loading.teachers) return;
+    this.loading.teachers = true;
+    this.coverService.getAllTeachers().subscribe({
+      next: (data) => {
+        const safeData = data?.length > 0 ? data : [];
+        this.coverTeachers = safeData.map((t) => ({
+          id: t.id,
+          name: t.name,
+        }));
+        this.loading.teachers = false;
+      },
+      error: (err) => {
+        console.error(err.message);
+        this.loading.teachers = false;
+      },
     });
   }
 
@@ -132,7 +155,7 @@ export class CoverTeacherAssignment {
     this.coverService.getUnits(classId).subscribe({
       next: (data) => {
         const safeData = Array.isArray(data) ? data : [];
-        this.units = safeData.map(u => ({
+        this.units = safeData.map((u) => ({
           id: u.unit_id,
           name: u.unit_name,
         }));
@@ -141,7 +164,7 @@ export class CoverTeacherAssignment {
       error: (err) => {
         console.error(err.message);
         this.loading.units = false;
-      }
+      },
     });
   }
 
@@ -152,7 +175,7 @@ export class CoverTeacherAssignment {
     this.coverService.getLessons(classId, unitId).subscribe({
       next: (data) => {
         const safeData = Array.isArray(data) ? data : [];
-        this.lessons = safeData.map(l => ({
+        this.lessons = safeData.map((l) => ({
           id: l.lesson_id,
           name: l.lesson_name,
         }));
@@ -161,7 +184,7 @@ export class CoverTeacherAssignment {
       error: (err) => {
         console.error('Lesson fetch failed:', err.message);
         this.loading.lessons = false;
-      }
+      },
     });
   }
 
@@ -175,7 +198,7 @@ export class CoverTeacherAssignment {
         cover_teacher_id: [null],
         unit_id: [null],
         lesson_id: [null],
-        note: ['']
+        note: [''],
       });
       this.setupValueChanges(record);
       this.records.push(record);
@@ -191,7 +214,7 @@ export class CoverTeacherAssignment {
       cover_teacher_id: [null],
       unit_id: [null],
       lesson_id: [null],
-      note: ['']
+      note: [''],
     });
     this.setupValueChanges(record);
     this.records.push(record);
@@ -206,23 +229,15 @@ export class CoverTeacherAssignment {
 
   saveForm(): void {
     if (this.coverForm.valid) {
-      const record = this.coverForm.value.records[0];
-      const requestData = {
-        date: record.date,
-        school_id: record.school_id,
-        class_id: record.class_id,
-        official_teacher_id: record.official_teacher_id,
-        cover_teacher_id: record.cover_teacher_id,
-        unit_id: record.unit_id,
-        lesson_id: record.lesson_id,
-        note: record.note || ""
-      };
+      const records = this.coverForm.value.records;
+      const requestData = records.length > 1 ? records : records[0];
       this.coverService.saveAssignments(requestData).subscribe({
         next: () => {
           this.showForm = false;
           this.coverForm.reset();
+          this.loadAssignments();
         },
-        error: (err) => console.error(err.message)
+        error: (err) => console.error(err.message),
       });
     }
   }
@@ -233,70 +248,67 @@ export class CoverTeacherAssignment {
   }
 
   setupValueChanges(record: FormGroup) {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
     this.subscriptions = [];
 
     const schoolId$ = new Subject<number>();
     const classId$ = new Subject<number>();
     const unitId$ = new Subject<number>();
 
-    const schoolSub = schoolId$.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(schoolId => {
-      if (schoolId) this.loadClasses(schoolId);
-    });
+    const schoolSub = schoolId$
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((schoolId) => {
+        if (schoolId) this.loadClasses(schoolId);
+      });
     this.subscriptions.push(schoolSub);
 
-    const classSub = classId$.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(classId => {
-      if (classId) {
-        this.loadUnits(classId);
-        this.loadTeachers(classId);
-      }
-    });
+    const classSub = classId$
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((classId) => {
+        if (classId) {
+          this.loadOfficialTeachers(classId);
+          this.loadUnits(classId);
+        }
+      });
     this.subscriptions.push(classSub);
 
-    const unitSub = unitId$.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(unitId => {
-      const classId = record.get('class_id')?.value;
-      if (unitId) this.loadLessons(classId, unitId);
-    });
+    const unitSub = unitId$
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((unitId) => {
+        const classId = record.get('class_id')?.value;
+        if (unitId) this.loadLessons(classId, unitId);
+      });
     this.subscriptions.push(unitSub);
 
     const schoolControl = record.get('school_id');
     if (schoolControl) {
-      const schoolSubValue = schoolControl.valueChanges.subscribe(schoolId => {
-        record.patchValue({
-          class_id: null,
-          official_teacher_id: null,
-          cover_teacher_id: null,
-          unit_id: null,
-          lesson_id: null
-        });
-        this.classes = [];
-        this.teachers = [];
-        this.units = [];
-        this.lessons = [];
-        schoolId$.next(schoolId || 0);
-      });
+      const schoolSubValue = schoolControl.valueChanges.subscribe(
+        (schoolId) => {
+          record.patchValue({
+            class_id: null,
+            official_teacher_id: null,
+            unit_id: null,
+            lesson_id: null,
+          });
+          this.classes = [];
+          this.officialTeachers = [];
+          this.units = [];
+          this.lessons = [];
+          schoolId$.next(schoolId || 0);
+        }
+      );
       this.subscriptions.push(schoolSubValue);
     }
 
     const classControl = record.get('class_id');
     if (classControl) {
-      const classSubValue = classControl.valueChanges.subscribe(classId => {
+      const classSubValue = classControl.valueChanges.subscribe((classId) => {
         record.patchValue({
           official_teacher_id: null,
-          cover_teacher_id: null,
           unit_id: null,
-          lesson_id: null
+          lesson_id: null,
         });
-        this.teachers = [];
+        this.officialTeachers = [];
         this.units = [];
         this.lessons = [];
         classId$.next(classId || 0);
@@ -306,9 +318,9 @@ export class CoverTeacherAssignment {
 
     const unitControl = record.get('unit_id');
     if (unitControl) {
-      const unitSubValue = unitControl.valueChanges.subscribe(unitId => {
+      const unitSubValue = unitControl.valueChanges.subscribe((unitId) => {
         record.patchValue({
-          lesson_id: null
+          lesson_id: null,
         });
         this.lessons = [];
         unitId$.next(unitId || 0);
@@ -318,15 +330,35 @@ export class CoverTeacherAssignment {
   }
 
   isFormValid(): boolean {
-    return this.records.controls.every(record => {
+    return this.records.controls.every((record) => {
       const r = record as FormGroup;
-      return r.get('date')?.value &&
-             r.get('school_id')?.value &&
-             r.get('class_id')?.value &&
-             r.get('official_teacher_id')?.value &&
-             r.get('cover_teacher_id')?.value &&
-             r.get('unit_id')?.value &&
-             r.get('lesson_id')?.value;
+      return (
+        r.get('date')?.value &&
+        r.get('school_id')?.value &&
+        r.get('class_id')?.value &&
+        r.get('official_teacher_id')?.value &&
+        r.get('cover_teacher_id')?.value &&
+        r.get('unit_id')?.value &&
+        r.get('lesson_id')?.value
+      );
     });
+  }
+
+  loadAssignments() {
+    this.loadingAssignments = true;
+    this.coverService.getCoverTeacherList().subscribe({
+      next: (data) => {
+        this.assignments = Array.isArray(data) ? data : [];
+        this.loadingAssignments = false;
+      },
+      error: (err) => {
+        console.error(err.message);
+        this.loadingAssignments = false;
+      },
+    });
+  }
+
+  ngOnInit() {
+    this.loadAssignments();
   }
 }

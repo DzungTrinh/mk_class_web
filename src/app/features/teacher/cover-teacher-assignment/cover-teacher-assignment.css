@@ -227,3 +227,35 @@ textarea.input-control {
     align-items: stretch;
   }
 }
+
+
+.assignments-table {
+  margin-top: 24px;
+}
+
+.assignments-table h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.assignment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.assignment-table th,
+.assignment-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.assignment-table th {
+  background-color: #f5f5f5;
+  font-weight: 500;
+}
+
+.assignment-table tr:hover {
+  background-color: #f9f9f9;
+}

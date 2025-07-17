@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { AttendanceFilter, AttendanceRecord } from '../models/attendance';
+import { AttendanceFilter, AttendanceRecord } from '../../teacher/models/attendance';
 import { environment } from '../../../../environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttendanceService {
-  private apiUrl = environment.apiBase;
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

@@ -130,6 +130,12 @@ label {
   background-color: #059669;
 }
 
+.export-button:disabled {
+  background-color: #9ca3af; /* gray */
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
 .table-wrapper {
   overflow-x: auto;
 }

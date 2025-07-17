@@ -17,13 +17,13 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(dto: LoginDto) {
-    return this.http.post<TokenResponse>(`${environment.apiBase}/user/login`, dto).pipe(
+    return this.http.post<TokenResponse>(`${environment.apiUrl}/user/login`, dto).pipe(
       tap(res => this.finishAuth(res))
     );
   }
 
   register(dto: RegisterDto) {
-    return this.http.post<TokenResponse>(`${environment.apiBase}/user/register`, dto).pipe(
+    return this.http.post<TokenResponse>(`${environment.apiUrl}/user/register`, dto).pipe(
       tap(res => this.finishAuth(res))
     );
   }
@@ -40,7 +40,7 @@ export class AuthService {
     const refresh_token = getRefreshToken();
     if (!refresh_token) return throwError(() => new Error('No refresh token'));
     return this.http
-      .post<TokenResponse>(`${environment.apiBase}/user/refresh`, { refresh_token })
+      .post<TokenResponse>(`${environment.apiUrl}/user/refresh`, { refresh_token })
       .pipe(tap(res => this.finishAuth(res)));
   }
 

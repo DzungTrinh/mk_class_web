@@ -21,21 +21,31 @@
         <label>School Name</label>
         <select [(ngModel)]="schoolId" class="input-control">
           <option value="">All Schools</option>
-          <option *ngFor="let school of schools" [value]="school.id">{{ school.name }}</option>
+          <option *ngFor="let school of schools" [value]="school.id">
+            {{ school.name }}
+          </option>
         </select>
       </div>
       <div class="filter-quarter">
         <label>Class Name</label>
         <select [(ngModel)]="classId" class="input-control">
           <option value="">All Classes</option>
-          <option *ngFor="let class of classes" [value]="class.id">{{ class.name }}</option>
+          <option *ngFor="let class of classes" [value]="class.id">
+            {{ class.name }}
+          </option>
         </select>
       </div>
       <div class="filter-quarter">
         <label>Teacher Name</label>
-        <select [(ngModel)]="teacherId" class="input-control" (ngModelChange)="updateTeacherIds($event)">
+        <select
+          [(ngModel)]="teacherId"
+          class="input-control"
+          (ngModelChange)="updateTeacherIds($event)"
+        >
           <option value="">All Teachers</option>
-          <option *ngFor="let teacher of teachers" [value]="teacher.id">{{ teacher.name }}</option>
+          <option *ngFor="let teacher of teachers" [value]="teacher.id">
+            {{ teacher.name }}
+          </option>
         </select>
       </div>
       <div class="filter-quarter">
@@ -51,7 +61,12 @@
     <div class="filter-row">
       <div class="filter-three-quarters">
         <label>Search</label>
-        <input type="text" [(ngModel)]="query" placeholder="Search by class code, teacher, or school..." class="input-control" />
+        <input
+          type="text"
+          [(ngModel)]="query"
+          placeholder="Search by class code, teacher, or school..."
+          class="input-control"
+        />
       </div>
       <div class="filter-quarter align-bottom">
         <label class="hidden-label">Search</label>
@@ -59,11 +74,17 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Table Section -->
   <div class="table-wrapper">
     <div class="table-actions">
-      <button class="export-button" (click)="exportData()">Export</button>
+      <button
+        class="export-button"
+        (click)="exportData()"
+        [disabled]="isExporting"
+      >
+        {{ isExporting ? 'Exporting...' : 'Export' }}
+      </button>
     </div>
     <table>
       <thead>
@@ -90,7 +111,10 @@
           <tr *ngIf="!isLoading && error" class="error">
             <td colspan="10">{{ error }}</td>
           </tr>
-          <tr *ngIf="!isLoading && !error && attendanceRecords.length === 0" class="no-data">
+          <tr
+            *ngIf="!isLoading && !error && attendanceRecords.length === 0"
+            class="no-data"
+          >
             <td colspan="10">No data available</td>
           </tr>
           <tr *ngFor="let record of attendanceRecords">

@@ -1,3 +1,4 @@
+/* Modal backdrop */
 .cover-teacher-container {
   padding: 24px;
 }
@@ -8,107 +9,221 @@
   margin-bottom: 16px;
 }
 
-.add-record-button {
-  background: #10b981;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-bottom: 16px;
-}
-
-.add-record-button:hover {
-  background: #059669;
-}
-
-.records-container {
-  margin-bottom: 20px;
-}
-
-.record-row {
-  border: 1px solid #e5e7eb;
+.add-btn {
+  padding: 10px 16px;
   border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  border: none;
+  background-color: #e7f3ff;
+  color: #0275d8;
+}
+
+.add-btn:hover {
+  background-color: #d0eaff;
+}
+
+.add-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.assignment-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form header with close button */
+.form-header {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10000;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #d9534f;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.close-btn:hover {
+  color: #c9302c;
+}
+
+/* Modal container */
+.assignment-form form {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 960px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  padding-top: 56px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form content (scrollable area) */
+.form-content {
+  max-height: calc(90vh - 120px);
+  overflow-y: auto;
+  padding-right: 8px;
+  flex: 1;
+}
+
+/* Assignment card */
+.assignment-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
   padding: 16px;
   margin-bottom: 16px;
-  background: #f9fafb;
+  background: #fafafa;
 }
 
 .form-row {
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
   margin-bottom: 16px;
 }
 
 .form-group {
   flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .form-group label {
-  display: block;
-  font-size: 14px;
+  margin-bottom: 4px;
   font-weight: 500;
-  margin-bottom: 6px;
+}
+
+.required {
+  color: red;
 }
 
 .input-control {
-  width: 100%;
-  padding: 10px;
-  font-size: 0.9rem;
-  border: 1px solid #d1d5db;
+  padding: 8px 10px;
   border-radius: 6px;
-  background-color: #fff;
-  box-sizing: border-box;
+  border: 1px solid #ccc;
+  font-size: 14px;
 }
 
-.remove-record-button {
-  background: #dc2626;
-  color: #fff;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
+textarea.input-control {
+  resize: vertical;
 }
 
-.remove-record-button:hover {
-  background: #b91c1c;
+.full-width {
+  width: 100%;
 }
 
+.loading-spinner {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #666;
+  animation: spin 1s linear infinite;
+}
+
+.empty-state {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #dc3545;
+  font-style: italic;
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Buttons */
 .form-actions {
+  padding: 16px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  position: sticky;
+  bottom: 0;
   display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 1000;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
   gap: 12px;
 }
 
-.save-button {
-  background: #111827;
-  color: #fff;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
+.cancel-btn,
+.submit-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
   cursor: pointer;
   font-weight: 500;
+  border: none;
 }
 
-.save-button:hover {
-  background: #1f2937;
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #333;
 }
 
-.save-button:disabled {
-  background: #9ca3af;
+.submit-btn {
+  background-color: #333;
+  color: #fff;
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.submit-btn:hover {
+  background-color: #000;
+}
+
+.submit-btn:disabled {
+  background-color: #9ca3af;
   cursor: not-allowed;
 }
 
-.cancel-button {
-  background: #f3f4f6;
-  color: #374151;
-  padding: 10px 18px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-}
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
 
-.cancel-button:hover {
-  background: #e5e7eb;
+  .form-actions {
+    padding: 12px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

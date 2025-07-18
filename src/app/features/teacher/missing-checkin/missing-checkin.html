@@ -1,0 +1,189 @@
+<div class="missing-checkin-container">
+  <h2>Missing Check-ins</h2>
+
+  <!-- ✅ Begin formGroup wrapper -->
+  <form [formGroup]="filterForm">
+    <div class="filter-section">
+      <div class="form-group">
+        <label>School <span class="required">*</span></label>
+        <select formControlName="school_id" class="input-control">
+          <option value="">Select School</option>
+          <option *ngFor="let school of schools" [value]="school.id">
+            {{ school.name }}
+          </option>
+        </select>
+        <span *ngIf="loading.schools" class="loading-icon">⏳</span>
+      </div>
+
+      <div class="form-group">
+        <label>Class <span class="required">*</span></label>
+        <select
+          formControlName="class_id"
+          class="input-control"
+          [disabled]="!filterForm.value.school_id || loading.classes"
+        >
+          <option value="">Select Class</option>
+          <option *ngFor="let class of classes" [value]="class.id">
+            {{ class.name }}
+          </option>
+        </select>
+        <span *ngIf="loading.classes" class="loading-icon">⏳</span>
+      </div>
+
+      <div class="form-group">
+        <label>Unit <span class="required">*</span></label>
+        <select
+          formControlName="unit"
+          class="input-control"
+          (change)="loadMissingCheckIns()"
+          [disabled]="!filterForm.value.class_id || loading.units"
+        >
+          <option value="">Select Unit</option>
+          <option *ngFor="let unit of units" [ngValue]="unit">
+            {{ unit.name }}
+          </option>
+        </select>
+        <span *ngIf="loading.units" class="loading-icon">⏳</span>
+      </div>
+
+      <div class="form-group">
+        <label>Teacher (Optional)</label>
+        <select
+          formControlName="teacher_id"
+          class="input-control"
+          [disabled]="!filterForm.value.class_id || loading.teachers"
+        >
+          <option value="">Select Teacher</option>
+          <option *ngFor="let teacher of teachers" [value]="teacher.id">
+            {{ teacher.name }}
+          </option>
+        </select>
+        <span *ngIf="loading.teachers" class="loading-icon">⏳</span>
+      </div>
+
+      <button
+        class="submit-btn"
+        (click)="loadMissingCheckIns()"
+        [disabled]="!filterForm.valid || loading.checkIns"
+      >
+        Load Check-ins
+      </button>
+    </div>
+  </form>
+  <!-- ✅ End formGroup wrapper -->
+
+  <div *ngIf="loading.checkIns" class="loading-icon">⏳</div>
+
+  <table
+    *ngIf="!loading.checkIns && missingCheckIns.length > 0"
+    class="missing-checkin-table"
+  >
+    <thead>
+      <tr>
+        <th>School</th>
+        <th>Class Name</th>
+        <th>Class Code</th>
+        <th>Lesson Name</th>
+        <th>Teacher Name</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let checkIn of missingCheckIns">
+        <td>{{ checkIn.lesson.school_name }}</td>
+        <td>{{ checkIn.lesson.class_name }}</td>
+        <td>{{ checkIn.lesson.class_code }}</td>
+        <td>{{ checkIn.lesson.lesson_name }}</td>
+        <td>{{ checkIn.lesson.teacher_name }}</td>
+        <td>{{ checkIn.lesson.teacher_email }}</td>
+        <td>
+          <button (click)="openCheckInForm(checkIn.lesson)" class="checkin-btn">
+            Check In
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div
+    *ngIf="!loading.checkIns && missingCheckIns.length === 0 && filterForm.valid"
+    class="no-data"
+  >
+    No missing check-ins found.
+  </div>
+
+  <div *ngIf="isModalOpen" class="modal-overlay">
+    <div class="modal-content">
+      <div class="checkin-form">
+        <form [formGroup]="checkInForm" (ngSubmit)="saveCheckIn()">
+          <div class="modal-header">
+            <h3>Check In</h3>
+            <button type="button" class="close-btn" (click)="closeForm()">
+              ×
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label>School</label>
+            <input
+              formControlName="school_name"
+              class="input-control"
+              readonly
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Class Code</label>
+            <input
+              formControlName="class_code"
+              class="input-control"
+              readonly
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Lesson Name</label>
+            <input
+              formControlName="lesson_name"
+              class="input-control"
+              readonly
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Teacher Name</label>
+            <input
+              formControlName="teacher_name"
+              class="input-control"
+              readonly
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Date <span class="required">*</span></label>
+            <input
+              formControlName="date"
+              type="date"
+              class="input-control"
+              [class.error]="checkInForm.get('date')?.touched && checkInForm.get('date')?.invalid"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" (click)="closeForm()">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="submit-btn"
+              [disabled]="checkInForm.invalid"
+            >
+              Save Check In
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,31 +9,11 @@ interface AssignCoverTeacherRequest {
   note?: string | null;
 }
 
-interface SchoolListResponse {
-  school_id: number;
-  school_name: string;
-}
-
-interface ClassListResponse {
-  class_id: number;
-  class_code: string;
-}
-
-interface TeacherListResponse {
-  teacher_id: number;
-  teacher_name: string;
-}
-
 interface TeacherListResponse2 {
   id: number;
   name: string;
   phone: string;
   email: string;
-}
-
-interface UnitListResponse {
-  unit_id: number;
-  unit_name: string;
 }
 
 interface LessonListResponse {

@@ -174,7 +174,12 @@ export class MissingCheckinComponent implements OnInit {
     this.loading.units = true;
     this.missingCheckinService.getUnits(classId).subscribe({
       next: (units) => {
-        this.units = units.map((u) => ({ id: u.unit_id, name: u.unit_name }));
+        this.units = units.map((u) => ({
+          id: u.unit_id,
+          name: u.unit_name,
+          model_id: u.model_id,
+          level_id: u.level_id,
+        }));
         this.loading.units = false;
         this.cdr.detectChanges();
       },
@@ -216,7 +221,7 @@ export class MissingCheckinComponent implements OnInit {
 
       const modelId = selectedUnit.model_id;
       const levelId = selectedUnit.level_id;
-      const unitId = selectedUnit.unit_id;
+      const unitId = selectedUnit.id;
       const request = {
         school_id: this.filterForm.value.school_id,
         class_id: this.filterForm.value.class_id,

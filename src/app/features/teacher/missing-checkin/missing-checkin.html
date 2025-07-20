@@ -38,7 +38,7 @@
           (change)="loadMissingCheckIns()"
           [disabled]="!filterForm.value.class_id || loading.units"
         >
-          <option value="">Select Unit</option>
+         <option [ngValue]="null">Select Unit</option>
           <option *ngFor="let unit of units" [ngValue]="unit">
             {{ unit.name }}
           </option>

@@ -13,9 +13,12 @@ export class MissingCheckinService {
 
   getSchools(): Observable<SchoolListResponse[]> {
     return this.http
-      .get<ControllerResponseDTO<SchoolListResponse[]>>(`${this.apiUrl}/school-list`, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      .get<ControllerResponseDTO<SchoolListResponse[]>>(
+        `${this.apiUrl}/school-list`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
       .pipe(
         map((response) => {
           if (response.code !== 200 || response.status !== 'success') {
@@ -23,15 +26,20 @@ export class MissingCheckinService {
           }
           return response.data;
         }),
-        catchError((error) => throwError(() => new Error(`API Error: ${error.message}`)))
+        catchError((error) =>
+          throwError(() => new Error(`API Error: ${error.message}`))
+        )
       );
   }
 
   getClasses(schoolId: number): Observable<ClassListResponse[]> {
     return this.http
-      .get<ControllerResponseDTO<ClassListResponse[]>>(`${this.apiUrl}/class-list-by-school?school_id=${schoolId}`, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      .get<ControllerResponseDTO<ClassListResponse[]>>(
+        `${this.apiUrl}/class-list-by-school?school_id=${schoolId}`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
       .pipe(
         map((response) => {
           if (response.code !== 200 || response.status !== 'success') {
@@ -39,15 +47,20 @@ export class MissingCheckinService {
           }
           return response.data;
         }),
-        catchError((error) => throwError(() => new Error(`API Error: ${error.message}`)))
+        catchError((error) =>
+          throwError(() => new Error(`API Error: ${error.message}`))
+        )
       );
   }
 
   getUnits(classId: number): Observable<UnitListResponse[]> {
     return this.http
-      .get<ControllerResponseDTO<UnitListResponse[]>>(`${this.apiUrl}/unit-list-by-class?class_id=${classId}`, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      .get<ControllerResponseDTO<UnitListResponse[]>>(
+        `${this.apiUrl}/unit-list-by-class?class_id=${classId}`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
       .pipe(
         map((response) => {
           if (response.code !== 200 || response.status !== 'success') {
@@ -55,15 +68,20 @@ export class MissingCheckinService {
           }
           return response.data;
         }),
-        catchError((error) => throwError(() => new Error(`API Error: ${error.message}`)))
+        catchError((error) =>
+          throwError(() => new Error(`API Error: ${error.message}`))
+        )
       );
   }
 
   getTeachers(classId: number): Observable<TeacherListResponse[]> {
     return this.http
-      .get<ControllerResponseDTO<TeacherListResponse[]>>(`${this.apiUrl}/teacher-list-by-class?class_id=${classId}`, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      .get<ControllerResponseDTO<TeacherListResponse[]>>(
+        `${this.apiUrl}/teacher-list-by-class?class_id=${classId}`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
       .pipe(
         map((response) => {
           if (response.code !== 200 || response.status !== 'success') {
@@ -71,7 +89,9 @@ export class MissingCheckinService {
           }
           return response.data;
         }),
-        catchError((error) => throwError(() => new Error(`API Error: ${error.message}`)))
+        catchError((error) =>
+          throwError(() => new Error(`API Error: ${error.message}`))
+        )
       );
   }
 
@@ -100,7 +120,9 @@ export class MissingCheckinService {
         headers: { 'Content-Type': 'application/json' },
       })
       .pipe(
-        catchError((error) => throwError(() => new Error(`API Error: ${error.message}`)))
+        catchError((error) =>
+          throwError(() => new Error(`API Error: ${error.message}`))
+        )
       );
   }
 
@@ -115,9 +137,13 @@ export class MissingCheckinService {
     date: number;
   }): Observable<any> {
     return this.http
-      .post<ControllerResponseDTO<any>>(`${this.apiUrl}/update_or_create_completed_lesson`, request, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      .post<ControllerResponseDTO<any>>(
+        `${this.apiUrl}/update_or_create_completed_lesson`,
+        request,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
       .pipe(
         map((response: ControllerResponseDTO<any>) => {
           if (response.code !== 200 || response.status !== 'success') {
@@ -125,7 +151,9 @@ export class MissingCheckinService {
           }
           return response.data;
         }),
-        catchError((error) => throwError(() => new Error(`API Error: ${error.message}`)))
+        catchError((error) =>
+          throwError(() => new Error(`API Error: ${error.message}`))
+        )
       );
   }
 }

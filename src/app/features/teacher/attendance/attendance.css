@@ -203,3 +203,61 @@ table tbody tr:nth-child(even) {
     margin-top: 8px;
   }
 }
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.page-number,
+.nav-button {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.page-number.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: 600;
+  border-color: #007bff;
+}
+
+.page-number:hover:not(.active),
+.nav-button:hover:not(:disabled) {
+  background-color: #e2e6ea;
+}
+
+.nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.attendance-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-size-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.page-size-control select {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+}

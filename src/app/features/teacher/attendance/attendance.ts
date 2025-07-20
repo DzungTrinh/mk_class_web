@@ -35,6 +35,10 @@ export class Attendance implements OnInit {
   classes: { id: number; name: string }[] = [];
   teachers: { id: number; name: string }[] = [];
 
+  page = 1;
+  pageSize = 10;
+  totalCount = 0;
+
   constructor(private attendanceService: AttendanceService) {}
 
   ngOnInit(): void {
@@ -68,17 +72,17 @@ export class Attendance implements OnInit {
       school_id: this.schoolId ? Number(this.schoolId) : undefined,
       class_id: this.classId ? Number(this.classId) : undefined,
       teacher_ids: this.teacherId ? [Number(this.teacherId)] : undefined,
-      is_cover:
-        this.isCover === 'true'
-          ? true
-          : this.isCover === 'false'
-          ? false
-          : undefined,
+      is_cover: this.isCover === 'true' ? true : this.isCover === 'false' ? false : undefined,
       query: this.query || undefined,
+      page: this.page,
+      page_size: this.pageSize,
     };
     this.attendanceService.getAttendanceHistory(filter).subscribe({
-      next: (records) => {
-        this.attendanceRecords = records;
+      next: (response: ControllerResponseDTO<{ total_count: number; page: number; page_size: number; data: AttendanceRecord[] }>) => {
+        if (response.status === 'success') {
+          this.attendanceRecords = response.data.data;
+          this.totalCount = response.data.total_count;
+        }
         this.isLoading = false;
       },
       error: (err) => {
@@ -90,6 +94,7 @@ export class Attendance implements OnInit {
   }
 
   applyFilters(): void {
+    this.page = 1;
     this.loadAttendance();
   }
 
@@ -103,11 +108,12 @@ export class Attendance implements OnInit {
     this.teacherId = '';
     this.isCover = '';
     this.query = '';
+    this.page = 1;
     this.loadAttendance();
   }
 
   exportData(): void {
-    this.isExporting=true;
+    this.isExporting = true;
     this.error = null;
     const filter: AttendanceFilter = {
       start_date: this.startDate,
@@ -115,12 +121,7 @@ export class Attendance implements OnInit {
       school_id: this.schoolId ? Number(this.schoolId) : undefined,
       class_id: this.classId ? Number(this.classId) : undefined,
       teacher_ids: this.teacherId ? [Number(this.teacherId)] : undefined,
-      is_cover:
-        this.isCover === 'true'
-          ? true
-          : this.isCover === 'false'
-          ? false
-          : undefined,
+      is_cover: this.isCover === 'true' ? true : this.isCover === 'false' ? false : undefined,
       query: this.query || undefined,
     };
     this.attendanceService.exportAttendanceHistory(filter).subscribe({
@@ -138,8 +139,7 @@ export class Attendance implements OnInit {
         this.isExporting = false;
       },
       error: (err) => {
-        this.error =
-          'Failed to export attendance data. Please try again later.';
+        this.error = 'Failed to export attendance data. Please try again later.';
         this.isExporting = false;
         console.error('Error exporting attendance:', err);
       },
@@ -148,5 +148,21 @@ export class Attendance implements OnInit {
 
   updateTeacherIds(value: string): void {
     this.teacherId = value;
+  }
+
+  goToPage(page: number): void {
+    if (page > 0 && page <= this.getTotalPages()) {
+      this.page = page;
+      this.loadAttendance();
+    }
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.totalCount / this.pageSize);
+  }
+
+  onPageSizeChange(): void {
+    this.page = 1;
+    this.loadAttendance();
   }
 }

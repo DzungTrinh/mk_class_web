@@ -77,26 +77,31 @@
 
   <!-- Table Section -->
   <div class="table-wrapper">
-    <div class="table-actions">
-      <button
-        class="export-button"
-        (click)="exportData()"
-        [disabled]="isExporting"
-      >
-        {{ isExporting ? 'Exporting...' : 'Export' }}
-      </button>
-    </div>
+    <div class="attendance-toolbar">
+  <div class="page-size-control">
+    <label for="pageSize">Rows per page:</label>
+    <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+      <option [value]="10">10</option>
+      <option [value]="25">25</option>
+      <option [value]="50">50</option>
+      <option [value]="100">100</option>
+    </select>
+  </div>
+
+  <button (click)="exportData()"  class="export-button" [disabled]="isExporting">
+    {{ isExporting ? 'Exporting...' : 'Export' }}
+  </button>
+</div>
     <table>
       <thead>
         <tr>
-          <th>ID</th>
           <th>Date</th>
           <th>School Name</th>
           <th>Class Name</th>
           <th>Class Code</th>
           <th>Teacher</th>
           <th>Level Unit</th>
-          <th>Lesson Number</th>
+          <th>Lesson Name</th>
           <th>Checkin By</th>
           <th>Type</th>
         </tr>
@@ -104,33 +109,63 @@
       <tbody>
         <ng-container *ngIf="isLoading; else content">
           <tr class="loading">
-            <td colspan="10">Loading...</td>
+            <td colspan="9">Loading...</td>
           </tr>
         </ng-container>
         <ng-template #content>
           <tr *ngIf="!isLoading && error" class="error">
-            <td colspan="10">{{ error }}</td>
+            <td colspan="9">{{ error }}</td>
           </tr>
           <tr
             *ngIf="!isLoading && !error && attendanceRecords.length === 0"
             class="no-data"
           >
-            <td colspan="10">No data available</td>
+            <td colspan="9">No data available</td>
           </tr>
           <tr *ngFor="let record of attendanceRecords">
-            <td>{{ record.id }}</td>
             <td>{{ record.date | date:'MM/dd/yyyy' }}</td>
             <td>{{ record.school_name }}</td>
             <td>{{ record.class_name }}</td>
             <td>{{ record.class_code }}</td>
             <td>{{ record.teacher_name }}</td>
             <td>{{ record.level_unit }}</td>
-            <td>{{ record.lesson_number }}</td>
+            <td>{{ record.lesson_name }}</td>
             <td>{{ record.checkin_by }}</td>
             <td>{{ record.is_cover ? 'Cover' : 'Official' }}</td>
           </tr>
         </ng-template>
       </tbody>
     </table>
+
+    
+    <div class="pagination-wrapper" *ngIf="!isLoading && totalCount > pageSize">
+      <button
+        (click)="goToPage(page - 1)"
+        [disabled]="page === 1"
+        class="nav-button"
+      >
+        ‹ Prev
+      </button>
+
+      <ng-container
+        *ngFor="let p of [].constructor(getTotalPages()); let i = index"
+      >
+        <button
+          class="page-number"
+          [class.active]="page === i + 1"
+          (click)="goToPage(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+      </ng-container>
+
+      <button
+        (click)="goToPage(page + 1)"
+        [disabled]="page === getTotalPages()"
+        class="nav-button"
+      >
+        Next ›
+      </button>
+    </div>
   </div>
 </div>

@@ -30,5 +30,6 @@ interface CoverTeacherListResponse {
   cover_teacher_name: string;
   level_unit: string;
   lesson_id: number;
+  lesson_name: string;
   note: string;
 }

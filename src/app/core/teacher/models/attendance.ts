@@ -6,7 +6,8 @@ export interface AttendanceRecord {
   class_code: string;
   teacher_name: string;
   level_unit: string;
-  lesson_number: number;
+  lesson_id: number;
+  lesson_name: string;
   checkin_by: string;
   is_cover: boolean;
 }
@@ -18,4 +19,6 @@ export interface AttendanceFilter {
   teacher_ids?: number[];
   is_cover?: boolean;
   query?: string;
+  page?: number;
+  page_size?: number;
 }
